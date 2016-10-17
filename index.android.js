@@ -12,10 +12,20 @@ import {
   TextInput,
   View,
   Switch,
-  TouchHighlight
+  TouchHighlight,
+  Slider,
 } from 'react-native';
 
 export default class morningCoffee extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      interval: '10'};
+
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -36,24 +46,31 @@ export default class morningCoffee extends Component {
           </View>
         </View>
         <View style={styles.container}>
-          <View style={styles.brewStartSelector}>
-            <Text>
-              brewing
-            </Text>
-            <TextInput>
-            </TextInput>
-            <Text>
-              min before alarm 
-            </Text>
-          </View>
+          {this.intervalSelector()}
           <View style={styles.brewButton}>
 
           </View>
         </View>
       </View>
-    );
+    )};
+    intervalSelector() {
+      return (
+        <View style={styles.slider}>
+          <Text>
+            {this.state.interval} min
+          </Text>
+
+          <Slider
+            minimumValue={0}
+            maximumValue={30}
+            onValueChange={(value => this.setState({interval: value}))}
+            step={1}
+          />
+        </View>
+    )};
+
   }
-}
+
 
 const styles = StyleSheet.create({
   container: {
@@ -74,13 +91,18 @@ const styles = StyleSheet.create({
   },
   brewStartSelector: {
     flex: 5,
-    flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   brewButton: {
     flex: 3,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  slider: {
+    flexDirection: 'column',
+    minWidth: 200,
+  justifyContent: 'center'
   }
 
 });
