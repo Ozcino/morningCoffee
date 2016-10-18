@@ -63,16 +63,11 @@ export default class morningCoffee extends Component {
 
           {this.intervalSelector()}
 
-          <View style={styles.brewButton}>
-            <Text style={styles.alarmText}>
-              BrewNow!
-            </Text>
-          </View>
-
+          {this.brewButton()}
         </View>
-
       </View>
     )};
+
     alarmStatusToggle() {
       return (
         <View style={styles.alarmStatus}>
@@ -101,8 +96,16 @@ export default class morningCoffee extends Component {
         </View>
     )};
 
-  }
+    brewButton() {
+      return (
+        <View style={styles.brewButton}>
+          <Text style={styles.alarmText}>
+            BrewNow!
+          </Text>
+        </View>
+    )};
 
+  }
 
 const styles = StyleSheet.create({
   container: {
