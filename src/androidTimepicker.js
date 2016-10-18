@@ -1,7 +1,7 @@
 'use strict';
 
 var ReactNative = require('react-native');
-var React = require('react')
+var React = require('react');
 
 var {
   TimePickerAndroid,
@@ -64,7 +64,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     fontSize: 100,
-    margin: 25
+    margin: 25,
+    color: '#f0f8ff'
   },
 
 });

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
+  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -12,7 +13,7 @@ import {
   Slider,
 } from 'react-native';
 
-var AndroidTimepicker = require('./src/AndroidTimepicker.js')
+var AndroidTimepicker = require('./src/androidTimepicker.js')
 
 export default class morningCoffee extends Component {
 
@@ -49,23 +50,22 @@ export default class morningCoffee extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <Image source={require('./img/coffee.jpg')} style={styles.backgroundContainer}>
+            <View style={styles.container}>
 
-        <View style={styles.container}>
+              <AndroidTimepicker />
 
-          <AndroidTimepicker />
+              {this.alarmStatusToggle()}
 
-          {this.alarmStatusToggle()}
+            </View>
 
-        </View>
+            <View style={styles.container}>
 
-        <View style={styles.container}>
+              {this.intervalSelector()}
 
-          {this.intervalSelector()}
-
-          {this.brewButton()}
-        </View>
-      </View>
+              {this.brewButton()}
+            </View>
+      </Image>
     )};
 
     alarmStatusToggle() {
@@ -113,6 +113,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  backgroundContainer: {
+    flex: 1,
+    width: null,
+    height: null,
+  },
   alarmStatus: {
     flex: 3,
     flexDirection: 'row',
@@ -121,6 +126,7 @@ const styles = StyleSheet.create({
   },
   alarmText: {
     fontSize: 30,
+    color: '#f0f8ff',
   },
   brewStartSelector: {
     flex: 5,
@@ -140,6 +146,7 @@ const styles = StyleSheet.create({
   },
   sliderText: {
     fontSize: 20,
+    color: '#f0f8ff',
   }
 
 });
