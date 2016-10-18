@@ -12,6 +12,8 @@ import {
   Slider,
 } from 'react-native';
 
+var AndroidTimepicker = require('./src/AndroidTimepicker.js')
+
 export default class morningCoffee extends Component {
 
   constructor(props) {
@@ -51,21 +53,9 @@ export default class morningCoffee extends Component {
 
         <View style={styles.container}>
 
-            <TouchableWithoutFeedback
-              onPress={this.showPicker.bind(this,'preset',{ hour: this.state.presetHour, minute: this.state.presetMinute, })}>
-              <Text style={styles.alarmTime}>
-                0{this.state.presetHour}:{this.state.presetMinute}0
-              </Text>
-            </TouchableWithoutFeedback>
+          <AndroidTimepicker />
 
-            <View style={styles.alarmStatus}>
-              <Text style={styles.alarmText}>
-                Alarm on/off
-              </Text>
-              <Switch
-                value={this.state.activated}
-                onValueChange={(value => this.setState({activated: value}))}/>
-            </View>
+          {this.alarmStatusToggle()}
 
         </View>
 
@@ -83,6 +73,18 @@ export default class morningCoffee extends Component {
 
       </View>
     )};
+    alarmStatusToggle() {
+      return (
+        <View style={styles.alarmStatus}>
+          <Text style={styles.alarmText}>
+            Alarm on/off
+          </Text>
+          <Switch
+            value={this.state.activated}
+            onValueChange={(value => this.setState({activated: value}))}/>
+        </View>
+    )};
+
     intervalSelector() {
       return (
         <View style={styles.slider}>
@@ -107,13 +109,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  alarmTime: {
-    flex: 6,
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: 100,
-    margin: 25
   },
   alarmStatus: {
     flex: 3,

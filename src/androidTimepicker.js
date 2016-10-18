@@ -5,16 +5,17 @@ var React = require('react')
 
 var {
   TimePickerAndroid,
+  View,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
 } = ReactNative;
 
-class androidTimepicker extends React.Component {
+class AndroidTimepicker extends React.Component {
 
   state = {
-    presetHour: 7,
-    presetMinute: 0,
+    presetHour: 10,
+    presetMinute: 15,
   };
 
   showPicker = async (stateKey, options) => {
@@ -22,14 +23,14 @@ class androidTimepicker extends React.Component {
       const {action, minute, hour} = await TimePickerAndroid.open(options);
       var newState = {};
       if (action === TimePickerAndroid.timeSetAction) {
-        newState[stateKey + 'Text'] = _formatTime(hour, minute);
+        newState[stateKey + 'Text'] = hour + ':' + (minute < 10 ? '0' + minute : minute);
         newState[stateKey + 'Hour'] = hour;
         newState[stateKey + 'Minute'] = minute; }
 
       else if (action === TimePickerAndroid.dismissedAction) {
         newState[stateKey + 'Text'] = 'dismissed';
       }
-      this.setState(pickerState: newState);
+      this.setState(newState);
 
       } catch ({code, message}) {
         console.warn(`Error : `, message);
@@ -44,17 +45,28 @@ class androidTimepicker extends React.Component {
             hour: this.state.presetHour,
             minute: this.state.presetMinute,
           })}>
-          <Text style={styles.alarmTime}>
-            0{this.state.presetHour}:{this.state.presetMinute}
-          </Text>
+          <View>
+            <Text style={styles.alarmTime}>
+              {this.state.presetHour}:{this.state.presetMinute}
+            </Text>
+          </View>
         </TouchableWithoutFeedback>
       </View>
     );
   };
 
-  _formatTime(hour, minute) {
-     return hour + ':' + (minute < 10 ? '0' + minute : minute);
-  }
 }
 
-module.exports = androidTimepicker;
+const styles = StyleSheet.create({
+
+  alarmTime: {
+    flex: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: 100,
+    margin: 25
+  },
+
+});
+
+module.exports = AndroidTimepicker;
