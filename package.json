@@ -6,12 +6,12 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "build": "(cd android/ && ./gradlew assembleDebug)",
-    "start": "node node_modules/react-native/local-cli/cli.js start",
     "bundle-android": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --sourcemap-output android/app/src/main/assets/index.android.map --assets-dest android/app/src/main/res/"
   },
   "dependencies": {
     "react": "15.3.2",
-    "react-native": "0.35.0"
+    "react-native": "0.35.0",
+    "react-native-system-notification": "^0.2.1"
   },
   "jest": {
     "preset": "jest-react-native"

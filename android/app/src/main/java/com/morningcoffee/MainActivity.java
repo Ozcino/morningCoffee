@@ -1,6 +1,7 @@
 package com.morningcoffee;
 
 import com.facebook.react.ReactActivity;
+import io.neson.react.notification.NotificationPackage;
 
 public class MainActivity extends ReactActivity {
 
@@ -12,4 +13,5 @@ public class MainActivity extends ReactActivity {
     protected String getMainComponentName() {
         return "morningCoffee";
     }
+
 }
