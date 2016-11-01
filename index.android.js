@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   Image,
+  NativeModules,
   StyleSheet,
   Text,
   TextInput,
@@ -14,6 +15,7 @@ import {
 } from 'react-native';
 
 import Notification from 'react-native-system-notification';
+import AlarmModule from 'alarm-module';
 var AndroidTimepicker = require('./src/androidTimepicker.js')
 
 export default class morningCoffee extends Component {
@@ -100,10 +102,13 @@ export default class morningCoffee extends Component {
     brewButton() {
       return (
         <View style={styles.brewButton}>
+        <TouchableHighlight
+          onPress={() => this.handler()}>
           <Text style={styles.alarmText}>
             BrewNow!
           </Text>
         </View>
+        </TouchableHighlight>
     )};
 
   }
