@@ -5,19 +5,28 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.AlarmClock;
 import android.widget.Toast;
+
+
+import android.os.SystemClock;
+import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
-import android.util.Log;
+import static java.lang.String.format;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 
 public class AlarmModule extends ReactContextBaseJavaModule {
 
     private PendingIntent pendingIntent;
+    private PendingIntent pendingAlarm;
     private AlarmManager manager;
-    private static AlarmModule instance;
+    private AlarmClock sysAlarmClock;
     private Context reactContext;
 
     public AlarmModule(ReactApplicationContext reactContext) {
@@ -25,27 +34,38 @@ public class AlarmModule extends ReactContextBaseJavaModule {
         this.reactContext = getReactApplicationContext();
     }
 
-
     @Override
     public String getName() {
       return "AlarmModule";
     }
 
-    protected void onCreate() {
-      // Retrieve a PendingIntent that will perform a broadcast
-
-    }
-
     @ReactMethod
-    public void startAlarm() {
-      Intent alarmIntent = new Intent("REFRESH_THIS");
+    public void startAlarm(int year, int month, int date, int hour, int minute, int interval) {
+      Intent alarmIntent = new Intent("ALARM_RECEIVER");
       pendingIntent = PendingIntent.getBroadcast(reactContext, 0, alarmIntent, 0);
       manager = (AlarmManager)reactContext.getSystemService(Context.ALARM_SERVICE);
-      int interval = 20000;
 
-      manager.set(AlarmManager.RTC_WAKEUP, interval, pendingIntent);
-      Toast.makeText(reactContext, "Alarm Set", Toast.LENGTH_SHORT).show();
-      Log.d("THISISMANAGEROFALARMS", "Mangen");
+      String usrDate = date+"/"+month+"/"+year;
+      String usrTime = hour+":"+minute;
+
+      DateTime brewTime = DateTime.parse(format("%s %s", usrDate, usrTime ), DateTimeFormat.forPattern("dd/MM/yyyy HH:mm"));
+      DateTime now = DateTime.now();
+
+      // Possible issue with in-exact timing due to bundling of events?
+      manager.set(AlarmManager.RTC_WAKEUP, (brewTime.getMillis() - ((interval * 60) * 1000)), pendingIntent);
+      Log.d("Alarm set for: " + usrDate, usrTime);
+
+      // Intent alarmClock = new Intent(AlarmClock.ACTION_SET_ALARM);
+      //   alarmClock.putExtra(AlarmClock.EXTRA_HOUR, hour);
+      //   alarmClock.putExtra(AlarmClock.EXTRA_MINUTES, minute);
+      //   //                                                                          heheˆ0ˆ
+      //   alarmClock.putExtra(AlarmClock.EXTRA_MESSAGE, "Rise and shine! Fresh cup of Java");
+      //
+      //   this.startActivity(alarmClock);
+      // pendingAlarm = PendingIntent.getBroadcast(reactContext, 0, alarmClock, 0);
+      // manager.setAlarmClock(sysAlarmClock, pendingAlarm );
+
+      Toast.makeText(reactContext, "Coffee Timed", Toast.LENGTH_SHORT).show();
     }
 
     @ReactMethod

@@ -13,11 +13,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context arg0, Intent arg1) {
-        Log.d("Wrong context", "But running!!");
-        Toast.makeText(arg0,"I'm running", Toast.LENGTH_SHORT).show();
-
-        
-
+        Log.d("AlarmReceiver", " has received!");
+        Toast.makeText(arg0,"Starting the Coffee", Toast.LENGTH_LONG).show();
     }
 
 }

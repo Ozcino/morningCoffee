@@ -3,20 +3,19 @@ import {
   AppRegistry,
   Image,
   NativeModules,
+  Slider,
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   TimePickerAndroid,
-  View,
-  Switch,
-  TouchHighlight,
+  TouchableHighlight,
   TouchableWithoutFeedback,
-  Slider,
+  View,
 } from 'react-native';
 
 import Notification from 'react-native-system-notification';
 import AlarmModule from 'alarm-module';
-var AndroidTimepicker = require('./src/androidTimepicker.js')
 
 export default class morningCoffee extends Component {
 
@@ -24,11 +23,11 @@ export default class morningCoffee extends Component {
     super(props);
 
     this.state = {
-      interval: '10',
+      interval: 10,
       activated: true,
-      presetHour: 7,
-      presetMinute: 0};
-
+      presetHour: 10,
+      presetMinute: 30
+    };
   };
 
   showPicker = async (stateKey, options) => {
@@ -36,38 +35,29 @@ export default class morningCoffee extends Component {
       const {action, minute, hour} = await TimePickerAndroid.open(options);
       var newState = {};
       if (action === TimePickerAndroid.timeSetAction) {
-        newState[stateKey + 'Text'] = _formatTime(hour, minute);
+        newState[stateKey + 'Text'] = hour + ':' + (minute < 10 ? '0' + minute : minute);
         newState[stateKey + 'Hour'] = hour;
         newState[stateKey + 'Minute'] = minute; }
-
-
-      else if (action === TimePickerAndroid.dismissedAction) {
-        newState[stateKey + 'Text'] = 'dismissed';
-      }
       this.setState(newState);
-
       } catch ({code, message}) {
-        console.warn(`Error : `, message);
-        }
+        console.warn(`Error opening timePicker: `, message);
+      }
   };
 
   render() {
     return (
       <Image source={require('./img/coffee.jpg')} style={styles.backgroundContainer}>
-            <View style={styles.container}>
+        <View style={styles.container}>
 
-              <AndroidTimepicker />
+          {this.androidTimepicker()}
 
-              {this.alarmStatusToggle()}
+        </View>
+        <View style={styles.container}>
 
-            </View>
+          {this.intervalSelector()}
+          {this.brewButton()}
 
-            <View style={styles.container}>
-
-              {this.intervalSelector()}
-
-              {this.brewButton()}
-            </View>
+        </View>
       </Image>
     )};
 
@@ -101,14 +91,30 @@ export default class morningCoffee extends Component {
 
     brewButton() {
       return (
-        <View style={styles.brewButton}>
         <TouchableHighlight
-          onPress={() => this.handler()}>
+          onPress={() => AlarmModule.startAlarm(2016, 11, 2, this.state.presetHour, this.state.presetMinute, this.state.interval )}>
           <Text style={styles.alarmText}>
-            BrewNow!
+            Brew!
           </Text>
-        </View>
         </TouchableHighlight>
+    )};
+
+    androidTimepicker() {
+
+      return (
+        <View>
+          <TouchableWithoutFeedback
+            onPress={this.showPicker.bind(this,'preset',{
+              hour: this.state.presetHour,
+              minute: this.state.presetMinute,
+            })}>
+            <View>
+              <Text style={styles.alarmTime}>
+                {this.state.presetHour}:{this.state.presetMinute}
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
     )};
 
   }
@@ -124,11 +130,13 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
   },
-  alarmStatus: {
-    flex: 3,
-    flexDirection: 'row',
+  alarmTime: {
+    flex: 6,
     justifyContent: 'center',
     alignItems: 'center',
+    fontSize: 100,
+    margin: 25,
+    color: '#f0f8ff'
   },
   alarmText: {
     fontSize: 30,
@@ -142,7 +150,8 @@ const styles = StyleSheet.create({
   brewButton: {
     flex: 3,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    margin: 50
   },
   slider: {
     flex: 5,
