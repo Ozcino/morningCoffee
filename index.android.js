@@ -92,7 +92,7 @@ export default class morningCoffee extends Component {
     brewButton() {
       return (
         <TouchableHighlight
-          onPress={() => AlarmModule.startAlarm(2016, 11, 2, this.state.presetHour, this.state.presetMinute, this.state.interval )}>
+          onPress={() => AlarmModule.startAlarm(this.state.presetHour, this.state.presetMinute, this.state.interval )}>
           <Text style={styles.alarmText}>
             Brew!
           </Text>
