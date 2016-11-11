@@ -48,16 +48,20 @@ public class AlarmModule extends ReactContextBaseJavaModule {
 
       String usrTime = hour+":"+minute;
       DateTime now = new DateTime();
+      DateTime usr = DateTime.parse(format("%s", usrTime), DateTimeFormat.forPattern("HH:mm"));
+
       LocalDate date = new LocalDate();
+
+      if( usr.toLocalTime().compareTo(now.toLocalTime()) == -1 ) {
+        date = new LocalDate().plusDays(1);
+      }
 
       DateTime brewTime = DateTime.parse(format("%s %s", date.toString(), usrTime ), DateTimeFormat.forPattern("yy-MM-dd HH:mm"));
 
-      // Possible issue with in-exact timing due to bundling of events?
       manager.set(AlarmManager.RTC_WAKEUP, (brewTime.getMillis() - ((interval * 60) * 1000)), pendingIntent);
-      Log.d("Alarm set for: " , usrTime);
+      Log.d("Alarm set for: " + date , usrTime);
 
       setAlarmClock(hour, minute);
-
       Toast.makeText(reactContext, "Coffee Timed", Toast.LENGTH_SHORT).show();
     }
 
